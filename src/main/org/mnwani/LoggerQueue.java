@@ -41,6 +41,13 @@ public class LoggerQueue {
         } else {
             LogNode oldestLowestLevelNode = oldestLowestLevel.newer;
             if (logNode.compareTo(oldestLowestLevelNode) >= 0) {
+                LogNode temp = oldestLowestLevelNode.newer;
+                // can be optimized to walk forward from the oldest node
+                // while walking backwards from the newest node to reduce average time complexity
+                while (logNode.compareTo(temp) >= 0) {
+                    temp = temp.newer;
+                }
+                oldestLowestLevelNode = temp.older;
                 logNode.newer = oldestLowestLevelNode.newer;
                 oldestLowestLevelNode.newer.older = logNode;
                 oldestLowestLevelNode.newer = logNode;

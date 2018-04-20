@@ -20,7 +20,10 @@ public class Solution {
 
         infoLogger.info("ghi");
 
+        infoLogger.info("{} {}", "123", "456");
+
         LogReader logReader = new LogReader();
+        println(logReader.get());
         println(logReader.get());
         println(logReader.get());
         println(logReader.get());

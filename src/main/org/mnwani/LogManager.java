@@ -18,10 +18,28 @@ public class LogManager {
 
     void addLog(String name,
                 int level,
-                String message) {
+                String message,
+                String... messageParams) {
+
+        int msgParamsIdx = 0;
         LogNode logNode = new LogNode();
         logNode.name = name;
-        logNode.message = message;
+
+        StringBuilder stringBuilder = new StringBuilder(message.length());
+        for (int i = 0; i < message.length(); i++) {
+            if (i < message.length()-1 && message.charAt(i) == '{' && message.charAt(i+1) == '}') {
+                if (msgParamsIdx == messageParams.length) {
+                    throw new IllegalArgumentException("Number of parentheses and optional params must match");
+                }
+
+                stringBuilder.append(messageParams[msgParamsIdx++]);
+                i++;
+                continue;
+            }
+            stringBuilder.append(message.charAt(i));
+        }
+
+        logNode.message = stringBuilder.toString();
         logNode.level = level;
         loggerQueue.add(logNode);
     }
@@ -31,6 +49,7 @@ public class LogManager {
         LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(logNode.creationTime),
                                                          ZoneId.systemDefault());
         return dateTime.format(formatter) + " " +
+                "[" + logNode.threadName + "] " +
                 logNode.name + " " +
                 logNode.level + ": " +
                 logNode.message;

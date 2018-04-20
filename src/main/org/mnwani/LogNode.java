@@ -3,6 +3,7 @@ package main.org.mnwani;
 public class LogNode implements Comparable<LogNode> {
     String name;
     String message;
+    String threadName;
     int level;
     long creationTime;
     LogNode newer;
@@ -10,6 +11,7 @@ public class LogNode implements Comparable<LogNode> {
 
     LogNode() {
         this.creationTime = System.currentTimeMillis();
+        this.threadName = Thread.currentThread().getName();
     }
 
     @Override
