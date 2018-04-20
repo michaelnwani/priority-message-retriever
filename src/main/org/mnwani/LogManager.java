@@ -18,12 +18,14 @@ public class LogManager {
 
     void addLog(String name,
                 int level,
+                String logLevelName,
                 String message,
                 String... messageParams) {
 
         int msgParamsIdx = 0;
         LogNode logNode = new LogNode();
         logNode.name = name;
+        logNode.logLevelName = logLevelName;
 
         StringBuilder stringBuilder = new StringBuilder(message.length());
         for (int i = 0; i < message.length(); i++) {
@@ -51,7 +53,7 @@ public class LogManager {
         return dateTime.format(formatter) + " " +
                 "[" + logNode.threadName + "] " +
                 logNode.name + " " +
-                logNode.level + ": " +
+                logNode.logLevelName + ": " +
                 logNode.message;
     }
 

@@ -2,6 +2,7 @@ package main.org.mnwani;
 
 public class LogNode implements Comparable<LogNode> {
     String name;
+    String logLevelName;
     String message;
     String threadName;
     int level;
