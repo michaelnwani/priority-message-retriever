@@ -1,5 +1,11 @@
 package main.org.mnwani;
 
+/**
+ * A singleton class which stores and fetches {@link LogNode} log messages
+ * in order of highest priority -> lowest priority
+ * Priority is determined by log level (e.g. ERROR > WARN > INFO) followed by earliest insertion time
+ * @author Michael Nwani
+ */
 public class LoggerQueue {
     private static LoggerQueue instance;
     private static final LogNode oldestLowestLevel = new LogNode();
@@ -32,14 +38,30 @@ public class LoggerQueue {
         this.maxCapacity = maxCapacity;
     }
 
+    /**
+     *
+     * @return whether or not the queue is currently at max capacity
+     */
     public synchronized boolean isAtCapacity() {
         return size == maxCapacity;
     }
 
+    /**
+     *
+     * @return whether or not the queue is currently empty
+     */
     public synchronized boolean isEmpty() {
         return size == 0;
     }
 
+    /**
+     * Adds a message to the queue in the form of a {@link LogNode}
+     * If the node to be added is of a higher priority than the current highest-priority node,
+     * it becomes the new highest-priority node in the list, while the previous node is made second-highest priority.
+     * Otherwise, the node is walked up from the end of the list (lowest-priority node) to the front of the list,
+     * until the queue finds its proper point of insertion. This is O(n) in the worst case.
+     * @param logNode represents the log message to be added
+     */
     public synchronized void add(LogNode logNode) {
         if (size == maxCapacity) {
             throw new IllegalStateException("add() can't be called while queue is full");
@@ -75,6 +97,11 @@ public class LoggerQueue {
         size++;
     }
 
+    /**
+     *
+     * @return the highest-priority {@link LogNode} in the queue
+     * @throws IllegalStateException if the queue is currently empty
+     */
     public synchronized LogNode remove() {
         if (size == 0) {
             throw new IllegalStateException("remove() can't be called while queue is empty");
@@ -88,6 +115,11 @@ public class LoggerQueue {
         return newestHighestLevelNode;
     }
 
+    /**
+     *
+     * @param maxCapacity the max size of the queue
+     * @return the LoggerQueue singleton instance
+     */
     public static LoggerQueue getInstance(int maxCapacity) {
         if (instance == null) {
             instance = new LoggerQueue(maxCapacity);

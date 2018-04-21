@@ -3,6 +3,11 @@ package main.org.mnwani;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+/**
+ * Static factory used to create Logger instances according to their enclosing class.
+ * Only one logger instance will be returned per class.
+ * @author Michael Nwani
+ */
 public class LoggerFactory {
     public static ConcurrentMap<String, Logger> loggerMap = new ConcurrentHashMap<>();
 

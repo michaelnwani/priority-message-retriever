@@ -2,6 +2,10 @@ package main.org.mnwani;
 
 import java.util.HashMap;
 
+/**
+ * Custom logging implementation which should be instantiated via {@link LoggerFactory}'s getLogger method
+ * @author Michael Nwani
+ */
 public class Logger {
     private String name;
     private static HashMap<Integer, String> logLevelMap;
@@ -32,14 +36,29 @@ public class Logger {
                                         messageParams);
     }
 
+    /**
+     * Attempts to add an INFO-priority level log to the queue
+     * @param message a log message
+     * @param messageParams optional log arguments to match curly braces
+     */
     public void info(String message, String... messageParams) {
         log(LOG_LEVEL_INFO, message, messageParams);
     }
 
+    /**
+     * Attempts to add an WARN-priority level log to the queue
+     * @param message a log message
+     * @param messageParams optional log arguments to match curly braces
+     */
     public void warn(String message, String... messageParams) {
         log(LOG_LEVEL_WARN, message, messageParams);
     }
 
+    /**
+     * Attempts to add an ERROR-priority level log to the queue
+     * @param message a log message
+     * @param messageParams optional log arguments to match curly braces
+     */
     public void error(String message, String... messageParams) {
         log(LOG_LEVEL_ERROR, message, messageParams);
     }

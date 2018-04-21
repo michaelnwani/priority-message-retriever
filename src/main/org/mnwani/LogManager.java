@@ -5,6 +5,11 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * A singleton class that is the main interface for communicating with the {@link LoggerQueue} instance.
+ * Can be obtained via its {@link #getInstance()} method
+ * @author Michael Nwani
+ */
 public class LogManager {
     private static LoggerQueue loggerQueue;
     private static int LOGGER_QUEUE_MAX_CAPACITY = 100;
@@ -17,6 +22,15 @@ public class LogManager {
     private LogManager() {
     }
 
+    /**
+     * Adds a log message to the queue
+     * @param name the name of the {@link Logger} posting this log
+     * @param level the priority level of the log
+     * @param logLevelName the canonical name of the log's priority level
+     * @param message the log message
+     * @param messageParams optional log message params to be lazily evaluated
+     * @throws IllegalStateException if queue is at max capacity when this method is called
+     */
     void addLog(String name,
                 int level,
                 String logLevelName,
@@ -51,6 +65,10 @@ public class LogManager {
         loggerQueue.add(logNode);
     }
 
+    /**
+     *
+     * @return the highest-priority log currently in the queue
+     */
     public String getLog() {
         if (loggerQueue.isEmpty()) {
             return null;
@@ -71,6 +89,10 @@ public class LogManager {
         loggerQueue.setMaxCapacity(LOGGER_QUEUE_MAX_CAPACITY);
     }
 
+    /**
+     *
+     * @return the singleton instance of LogManager
+     */
     public static LogManager getInstance() {
         if (instance == null) {
             synchronized (LogManager.class) {
