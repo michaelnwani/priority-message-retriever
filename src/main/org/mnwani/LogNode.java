@@ -1,16 +1,16 @@
 package main.org.mnwani;
 
 public class LogNode implements Comparable<LogNode> {
-    String name;
-    String logLevelName;
-    String message;
-    String threadName;
-    int level;
-    long creationTime;
-    LogNode newer;
-    LogNode older;
+    public String name;
+    public String logLevelName;
+    public String message;
+    public String threadName;
+    public int level;
+    public long creationTime;
+    public LogNode newer;
+    public LogNode older;
 
-    LogNode() {
+    public LogNode() {
         this.creationTime = System.currentTimeMillis();
         this.threadName = Thread.currentThread().getName();
     }

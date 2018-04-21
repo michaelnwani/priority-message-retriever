@@ -36,7 +36,7 @@ public class LogManager {
         for (int i = 0; i < message.length(); i++) {
             if (i < message.length()-1 && message.charAt(i) == '{' && message.charAt(i+1) == '}') {
                 if (msgParamsIdx == messageParams.length) {
-                    throw new IllegalArgumentException("Number of parentheses and optional params must match");
+                    throw new IllegalArgumentException("Number of curly brace pairs and optional params must match");
                 }
 
                 stringBuilder.append(messageParams[msgParamsIdx++]);
@@ -51,7 +51,7 @@ public class LogManager {
         loggerQueue.add(logNode);
     }
 
-    String getLog() {
+    public String getLog() {
         if (loggerQueue.isEmpty()) {
             return null;
         }
@@ -66,7 +66,7 @@ public class LogManager {
                 logNode.message;
     }
 
-    void setLoggerQueueMaxCapacity(int maxCapacity) {
+    public void setLoggerQueueMaxCapacity(int maxCapacity) {
         LOGGER_QUEUE_MAX_CAPACITY = maxCapacity;
         loggerQueue.setMaxCapacity(LOGGER_QUEUE_MAX_CAPACITY);
     }
