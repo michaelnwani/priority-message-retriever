@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 public class LogManager {
     private static LoggerQueue loggerQueue;
+    private static int LOGGER_QUEUE_MAX_CAPACITY = 100;
     private static LogManager instance;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -21,6 +22,10 @@ public class LogManager {
                 String logLevelName,
                 String message,
                 String... messageParams) {
+
+        if (loggerQueue.isAtCapacity()) {
+            throw new IllegalStateException("can't add logs while log queue is at capacity");
+        }
 
         int msgParamsIdx = 0;
         LogNode logNode = new LogNode();
@@ -47,6 +52,10 @@ public class LogManager {
     }
 
     String getLog() {
+        if (loggerQueue.isEmpty()) {
+            return null;
+        }
+
         LogNode logNode = loggerQueue.remove();
         LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(logNode.creationTime),
                                                          ZoneId.systemDefault());
@@ -57,10 +66,19 @@ public class LogManager {
                 logNode.message;
     }
 
-    public static synchronized LogManager getInstance() {
+    void setLoggerQueueMaxCapacity(int maxCapacity) {
+        LOGGER_QUEUE_MAX_CAPACITY = maxCapacity;
+        loggerQueue.setMaxCapacity(LOGGER_QUEUE_MAX_CAPACITY);
+    }
+
+    public static LogManager getInstance() {
         if (instance == null) {
-            instance = new LogManager();
-            loggerQueue = new LoggerQueue(100);
+            synchronized (LogManager.class) {
+                if (instance == null) {
+                    instance = new LogManager();
+                    loggerQueue = LoggerQueue.getInstance(LOGGER_QUEUE_MAX_CAPACITY);
+                }
+            }
         }
         return instance;
     }

@@ -25,7 +25,6 @@ public class Logger {
     }
 
     private void log(int level, String message, String... messageParams) {
-
         LogManager.getInstance().addLog(name,
                                         level,
                                         logLevelMap.get(level),

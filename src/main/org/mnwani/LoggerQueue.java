@@ -1,10 +1,11 @@
 package main.org.mnwani;
 
 public class LoggerQueue {
-    LogNode oldestLowestLevel;
-    LogNode newestHighestLevel;
-    int size;
-    int maxCapacity;
+    private static LoggerQueue instance;
+    private static final LogNode oldestLowestLevel = new LogNode();
+    private static final LogNode newestHighestLevel = new LogNode();
+    private int size;
+    private int maxCapacity;
 
     LoggerQueue(int maxCapacity) {
         this.size = 0;
@@ -12,10 +13,7 @@ public class LoggerQueue {
         setupNewestOldest();
     }
 
-    private void setupNewestOldest() {
-        oldestLowestLevel = new LogNode();
-        newestHighestLevel = new LogNode();
-
+    private synchronized void setupNewestOldest() {
         oldestLowestLevel.older = null;
         oldestLowestLevel.newer = newestHighestLevel;
 
@@ -23,16 +21,31 @@ public class LoggerQueue {
         newestHighestLevel.newer = null;
     }
 
-    public boolean isEmpty() {
+    public synchronized void setMaxCapacity(int maxCapacity) {
+        if (this.size > maxCapacity) {
+            throw new IllegalArgumentException("current queue size " + size +
+                                               " is greater than the attempted max capacity of " +
+                                               maxCapacity);
+        } else if (maxCapacity < 1) {
+            throw new IllegalArgumentException("max capacity must be >= 1");
+        }
+        this.maxCapacity = maxCapacity;
+    }
+
+    public synchronized boolean isAtCapacity() {
+        return size == maxCapacity;
+    }
+
+    public synchronized boolean isEmpty() {
         return size == 0;
     }
 
-    public void add(LogNode logNode) {
+    public synchronized void add(LogNode logNode) {
         if (size == maxCapacity) {
-            // TODO: throw exception
+            throw new IllegalStateException("add() can't be called while queue is full");
         }
+
         LogNode newestHighestLevelNode = newestHighestLevel.older;
-        // add to queue
         if (logNode.compareTo(newestHighestLevelNode) >= 0) {
             newestHighestLevelNode.newer = logNode;
             logNode.older = newestHighestLevelNode;
@@ -40,6 +53,7 @@ public class LoggerQueue {
             newestHighestLevel.older = logNode;
         } else {
             LogNode oldestLowestLevelNode = oldestLowestLevel.newer;
+
             if (logNode.compareTo(oldestLowestLevelNode) >= 0) {
                 LogNode temp = oldestLowestLevelNode.newer;
                 // can be optimized to walk forward from the oldest node
@@ -61,9 +75,9 @@ public class LoggerQueue {
         size++;
     }
 
-    public LogNode remove() {
+    public synchronized LogNode remove() {
         if (size == 0) {
-            // TODO: throw exception or return null
+            throw new IllegalStateException("remove() can't be called while queue is empty");
         }
         size--;
         LogNode newestHighestLevelNode = newestHighestLevel.older;
@@ -72,5 +86,12 @@ public class LoggerQueue {
         newestHighestLevel.older = temp;
         temp.newer = newestHighestLevel;
         return newestHighestLevelNode;
+    }
+
+    public static LoggerQueue getInstance(int maxCapacity) {
+        if (instance == null) {
+            instance = new LoggerQueue(maxCapacity);
+        }
+        return instance;
     }
 }
