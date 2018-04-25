@@ -1,4 +1,4 @@
-package main.org.mnwani;
+package org.mnwani;
 
 public class LogReader {
     public String get() {

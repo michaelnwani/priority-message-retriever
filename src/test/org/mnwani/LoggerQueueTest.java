@@ -1,7 +1,7 @@
 package test.org.mnwani;
 
-import main.org.mnwani.LogNode;
-import main.org.mnwani.LoggerQueue;
+import org.mnwani.LogNode;
+import org.mnwani.LoggerQueue;
 
 public class LoggerQueueTest {
     public static void main(String[] args) throws InterruptedException {

@@ -1,4 +1,4 @@
-package main.org.mnwani;
+package org.mnwani;
 
 /**
  * A singleton class which stores and fetches {@link LogNode} log messages

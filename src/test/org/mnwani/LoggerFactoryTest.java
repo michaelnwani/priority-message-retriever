@@ -1,7 +1,7 @@
 package test.org.mnwani;
 
-import main.org.mnwani.Logger;
-import main.org.mnwani.LoggerFactory;
+import org.mnwani.Logger;
+import org.mnwani.LoggerFactory;
 
 public class LoggerFactoryTest {
     public static void main(String[] args) {

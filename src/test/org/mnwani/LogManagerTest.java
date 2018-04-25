@@ -1,6 +1,6 @@
 package test.org.mnwani;
 
-import main.org.mnwani.LogManager;
+import org.mnwani.LogManager;
 
 public class LogManagerTest {
     public static void main(String[] args) {

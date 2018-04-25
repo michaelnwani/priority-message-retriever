@@ -1,4 +1,4 @@
-package main.org.mnwani;
+package org.mnwani;
 
 public class LogNode implements Comparable<LogNode> {
     public String name;

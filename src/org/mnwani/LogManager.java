@@ -1,4 +1,4 @@
-package main.org.mnwani;
+package org.mnwani;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
